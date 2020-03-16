@@ -5,6 +5,9 @@ const input = document.getElementById('in');
 const answer =  document.getElementById('answer');
 const form = document.getElementById('form');
 const regions = document.getElementById('regions');
+const cities = document.getElementById('cities');
+const regionOptionDef = 'Select the region';
+const cityOptionDef = 'Select the city';
 const queryArr = [];
 
 const getCityWeather = function (e) {
@@ -58,6 +61,24 @@ const getRegions = function (e) {
   });
 };
 
+const getCities = function () {
+  if (regions.innerText == regionOptionDef) return;
+  const url = `https://gist.githubusercontent.com/alex-oleshkevich/6946d85bf075a6049027306538629794/raw/3986e8e1ade2d4e1186f8fee719960de32ac6955/by-cities.json`;
+  fetch(url)
+  .then(response => response.json())
+  .then(data => {
+    for(let i = 0; i < data[0]['regions'].length; i++) {
+      if (regions.value == data[0]['regions'][i]['name']) {
+        data[0]['regions'][i]['cities'].forEach(item => {
+          let option = document.createElement('option');
+          option.innerText = item['name'];
+          cities.appendChild(option);
+        });
+      }
+    } 
+  })
+};
+
 const clearAll = function () {
   const answer =  document.getElementById('answer');
   console.log(answer);
@@ -65,5 +86,6 @@ const clearAll = function () {
 };
 
 document.addEventListener('DOMContentLoaded', getRegions);
+regions.addEventListener('change', getCities);
 form.addEventListener('submit', getCityWeather);
 //clearBtn.addEventListener('onclick', clearAll);
