@@ -4,10 +4,16 @@ const clearBtn = document.getElementById('btnClear');
 const input = document.getElementById('in');
 const answer =  document.getElementById('answer');
 const form = document.getElementById('form');
+const regions = document.getElementById('regions');
+const queryArr = [];
 
 const getCityWeather = function (e) {
   e.preventDefault();
   const inputVal = input.value;
+  for (let i = 0; i < queryArr.length; i++) {
+    if (queryArr[i] === inputVal) return;
+  }
+  queryArr.push(inputVal);
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${inputVal}&appid=${apiKey}&units=metric`;
   fetch(url)
     .then(response => response.json())
@@ -35,11 +41,29 @@ const getCityWeather = function (e) {
   });
 };
 
+const getRegions = function (e) {
+  e.preventDefault();
+  const url = `https://gist.githubusercontent.com/alex-oleshkevich/6946d85bf075a6049027306538629794/raw/3986e8e1ade2d4e1186f8fee719960de32ac6955/by-cities.json`;
+  fetch(url)
+  .then(response => response.json())
+  .then(data => {
+    for(let i = 0; i < data[0]['regions'].length; i++) {
+      let option = document.createElement('option');
+      option.innerText = data[0]['regions'][i]['name'];
+      regions.appendChild(option);
+    } 
+  })
+  .catch(() => {
+
+  });
+};
+
 const clearAll = function () {
   const answer =  document.getElementById('answer');
   console.log(answer);
   answer.innerHTML = "";
 };
 
+document.addEventListener('DOMContentLoaded', getRegions);
 form.addEventListener('submit', getCityWeather);
 //clearBtn.addEventListener('onclick', clearAll);
