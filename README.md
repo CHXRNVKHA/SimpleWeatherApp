@@ -1,4 +1,4 @@
-# SimpleWeatherApp
+# SimpleWeatherApp1
 ## Tutorial
 1. Input **any** city name into field
 1. Press 'submit' button
